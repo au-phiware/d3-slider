@@ -334,7 +334,7 @@ return function module() {
 
   // Find the nearest tick
   function nearestTick(pos) {
-    var ticks = scale.ticks ? scale.ticks() : scale.domain();
+    var ticks = axis.tickValues() || (scale.ticks ? scale.ticks() : scale.domain());
     var dist = ticks.map(function(d) {return pos - scale(d);});
     var i = -1,
         index = 0,
