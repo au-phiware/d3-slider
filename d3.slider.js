@@ -336,6 +336,9 @@ return function module() {
   // Find the nearest tick
   function nearestTick(pos) {
     var ticks = axis.tickValues() || (scale.ticks ? scale.ticks() : scale.domain());
+    ticks = ticks.sort(function(a, b) {
+      return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+    });
     var dist = ticks.map(function(d) {return pos - scale(d);});
     var i = -1,
         index = 0,
