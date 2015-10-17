@@ -40,6 +40,7 @@ return function module() {
 
   // Private variables
   var axisScale,
+      tickValidator,
       dispatch = d3.dispatch("slide", "slideend"),
       formatPercent = d3.format(".2%"),
       tickFormat = d3.format(".0"),
@@ -346,8 +347,10 @@ return function module() {
     do {
         i++;
         if (Math.abs(dist[i]) < r) {
-          r = Math.abs(dist[i]);
-          index = i;
+          if (!tickValidator || tickValidator.call(slider, ticks[i])) {
+            r = Math.abs(dist[i]);
+            index = i;
+          }
         };
     } while (dist[i] > 0 && i < dist.length - 1);
 
@@ -360,6 +363,12 @@ return function module() {
   };
 
   // Getter/setter functions
+  slider.tickValidator = function(_) {
+    if (!arguments.length) return tickValidator;
+    tickValidator = _;
+    return slider;
+  };
+
   slider.min = function(_) {
     if (!arguments.length) return min;
     min = _;
